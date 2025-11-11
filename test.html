@@ -1,141 +1,205 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Amazon Shopping Finder</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f7f7f7;
-      margin: 0;
-      padding: 0;
-      color: #333;
-    }
-    header {
-      background: #232f3e;
-      color: #fff;
-      text-align: center;
-      padding: 1.5em 1em;
-    }
-    h1 {
-      margin: 0;
-      font-size: 1.6em;
-    }
-    main {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2em 1em;
-    }
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 1em;
-      max-width: 400px;
-      width: 100%;
-      background: #fff;
-      padding: 1.5em;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    }
-    input[type="text"] {
-      padding: 0.8em;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 1em;
-    }
-    select, button {
-      padding: 0.8em;
-      border-radius: 6px;
-      border: none;
-      font-size: 1em;
-    }
-    select {
-      background: #f0f0f0;
-    }
-    button {
-      background: #ff9900;
-      color: #fff;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.2s ease;
-    }
-    button:hover {
-      background: #e68a00;
-    }
-    .results {
-      margin-top: 2em;
-      width: 100%;
-      max-width: 600px;
-    }
-    .item {
-      background: #fff;
-      border-radius: 8px;
-      padding: 1em;
-      margin-bottom: 1em;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-    }
-    .item h3 {
-      margin: 0 0 0.3em;
-    }
-    .item a {
-      color: #0073e6;
-      text-decoration: none;
-    }
-    .item a:hover {
-      text-decoration: underline;
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NeonFind • Cyberpunk Shopping Finder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#050014;--ink:#eaf2ff;--muted:#9bb0ffcc;
+    --neon1:#00e5ff;--neon2:#ff00ff;--neon3:#a1ff00;
+    --card:#0a0720cc;--edge:#2b1c52;
+  }
+  *{box-sizing:border-box}
+  html,body{scroll-behavior:smooth;height:100%}
+  body{
+    margin:0;color:var(--ink);
+    font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+    background:
+      radial-gradient(1200px 800px at 10% -10%,#2b1c5290,transparent 60%),
+      radial-gradient(1000px 600px at 90% 10%,#002a7a90,transparent 60%),
+      linear-gradient(180deg,#040011 0%,#060018 100%);
+  }
+  a{color:inherit;text-decoration:none}
+  .nav{position:sticky;top:0;z-index:10;backdrop-filter:blur(8px);
+    background:linear-gradient(180deg,#070017e0,#07001799);
+    border-bottom:1px solid #24165a;}
+  .nav .wrap{max-width:1100px;margin:0 auto;padding:12px 16px;
+    display:flex;align-items:center;gap:16px;}
+  .brand{font-family:Orbitron;font-weight:800;font-size:18px;}
+  .brand span{color:var(--neon1);}
+  .tabs{display:flex;gap:14px;flex-wrap:wrap;margin-left:auto;}
+  .tabs a{padding:8px 10px;border:1px solid #2a1877;border-radius:10px;
+    background:linear-gradient(180deg,#0c0630,#0a0524);}
+  .tabs a:hover{box-shadow:0 0 10px var(--neon2),inset 0 0 10px #3a2380;}
+  .section{max-width:1100px;margin:0 auto;padding:40px 16px;}
+  .hero h1{font-family:Orbitron;font-size:clamp(26px,4vw,42px);
+    margin:0 0 10px;text-shadow:0 0 8px var(--neon1),0 0 16px var(--neon2);}
+  .hero p{color:var(--muted);max-width:600px;}
+  .cta{margin-top:18px;display:flex;gap:12px;flex-wrap:wrap;}
+  .btn{padding:12px 14px;border-radius:12px;border:1px solid #4a2bd6;
+    background:linear-gradient(90deg,#0d0738,#180a57);
+    color:#e9e0ff;font-weight:700;cursor:pointer;}
+  .btn.primary{border-color:#00e5ff66;
+    background:linear-gradient(90deg,#022a35,#14003a);
+    box-shadow:0 0 16px #00e5ff80,inset 0 0 10px #00e5ff40;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-top:24px;}
+  .card{background:linear-gradient(180deg,#10083a,#0b0826);border:1px solid #2b1c52;
+    border-radius:14px;overflow:hidden;box-shadow:0 0 20px #2b1c5240;
+    display:flex;flex-direction:column;}
+  .shot{aspect-ratio:4/3;background:linear-gradient(130deg,#091133,#19003c);
+    display:grid;place-items:center;color:#a4b7ff;font-size:12px;}
+  .body{padding:10px 12px;display:flex;flex-direction:column;gap:6px;}
+  .title{font-weight:700;}
+  .meta{display:flex;justify-content:space-between;color:#a4b7ffcc;font-size:12px;}
+  .tag{font-size:11px;padding:2px 8px;border:1px dashed #3a2380;border-radius:999px;width:max-content;}
+  form{display:grid;gap:12px;background:linear-gradient(180deg,#10083a,#0b0826);
+    border:1px solid #2b1c52;border-radius:16px;padding:18px;
+    box-shadow:0 0 18px #2b1c5240;}
+  label{font-size:13px;color:#a4b7ff;}
+  input,select{width:100%;padding:10px 12px;border-radius:10px;
+    border:1px solid #2b1c52;background:#07031b;color:var(--ink);outline:none;}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  @media(max-width:700px){.row{grid-template-columns:1fr;}}
+  .checks{display:flex;gap:14px;flex-wrap:wrap;align-items:center;}
+  .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;}
+  .hint{color:#9bb0ffb0;font-size:12px;}
+  footer{color:#8ea1ffbb;font-size:12px;border-top:1px solid #24165a;margin-top:24px;padding:12px;text-align:center;}
+</style>
 </head>
 <body>
-  <header>
-    <h1>Amazon Shopping Finder</h1>
-    <p>Find the best products based on your search</p>
-  </header>
 
-  <main>
-    <form id="searchForm">
-      <label for="query">What are you looking for?</label>
-      <input type="text" id="query" placeholder="e.g. wireless headphones" required />
+<nav class="nav">
+  <div class="wrap">
+    <div class="brand">Neon<span>Find</span></div>
+    <div class="tabs" role="navigation">
+      <a href="#home">Home</a>
+      <a href="#quick">Quick Search</a>
+      <a href="#featured">Featured</a>
+      <a href="#about">About</a>
+    </div>
+  </div>
+</nav>
 
-      <label for="category">Category (optional)</label>
-      <select id="category">
-        <option value="">All</option>
-        <option value="electronics">Electronics</option>
-        <option value="home">Home</option>
-        <option value="fashion">Fashion</option>
-        <option value="books">Books</option>
-      </select>
+<section id="home" class="section hero">
+  <h1>Find the Best Deals — Across Amazon, eBay & Walmart</h1>
+  <p>A minimalist, cyberpunk portal for smart shoppers. Start with Quick Search to set your product, budget, color, and delivery priorities — then jump straight into results on your favorite marketplaces.</p>
+  <div class="cta">
+    <a class="btn primary" href="#quick">Start Quick Search</a>
+  </div>
+</section>
 
-      <button type="submit">Search on Amazon</button>
-    </form>
+<section id="featured" class="section">
+  <h2 style="font-family:Orbitron;margin:0 0 10px">Featured Picks</h2>
+  <div class="grid">
+    <article class="card"><div class="shot">Headphones</div>
+      <div class="body"><div class="title">Wireless ANC Headphones</div>
+        <div class="meta"><span>$199–$329</span><span>Top Rated</span></div>
+        <span class="tag">Popular</span></div></article>
+    <article class="card"><div class="shot">Monitors</div>
+      <div class="body"><div class="title">27″ 4K IPS Monitor</div>
+        <div class="meta"><span>$249–$399</span><span>Best Value</span></div>
+        <span class="tag">Work & Create</span></div></article>
+    <article class="card"><div class="shot">Kitchen</div>
+      <div class="body"><div class="title">Air Fryer 5–6 qt</div>
+        <div class="meta"><span>$69–$129</span><span>Fast Ship</span></div>
+        <span class="tag">Home</span></div></article>
+    <article class="card"><div class="shot">Wearables</div>
+      <div class="body"><div class="title">GPS Smartwatch</div>
+        <div class="meta"><span>$99–$199</span><span>Prime Eligible</span></div>
+        <span class="tag">Fitness</span></div></article>
+  </div>
+</section>
 
-    <div class="results" id="results"></div>
-  </main>
+<section id="quick" class="section">
+  <h2 style="font-family:Orbitron;margin:0 0 10px">Quick Search</h2>
+  <p class="sub">Answer a few essentials and jump to Amazon, eBay, and Walmart results with one click.</p>
 
-  <script>
-    const form = document.getElementById('searchForm');
-    const results = document.getElementById('results');
+  <form id="qs">
+    <div>
+      <label for="product">What product are you looking for?</label>
+      <input id="product" name="product" placeholder="e.g., wireless headphones" required>
+    </div>
 
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      const query = document.getElementById('query').value.trim();
-      const category = document.getElementById('category').value;
-      if (!query) return;
+    <div class="row">
+      <div>
+        <label for="color">Preferred color</label>
+        <select id="color"><option value=\"\">No preference</option>
+          <option>Black</option><option>White</option><option>Blue</option><option>Red</option><option>Silver</option><option>Green</option></select>
+      </div>
+      <div>
+        <label for="budget">Budget range</label>
+        <select id="budget"><option value=\"\">Any</option>
+          <option>under $50</option><option>$50–$150</option><option>$150–$300</option><option>$300+</option></select>
+      </div>
+    </div>
 
-      // Construct Amazon search URL
-      let url = `https://www.amazon.com/s?k=${encodeURIComponent(query)}`;
-      if (category) url += `+${encodeURIComponent(category)}`;
+    <div class="row">
+      <div>
+        <label for="urgency">Delivery urgency</label>
+        <select id="urgency"><option value=\"\">No rush</option><option>as soon as possible</option><option>within a week</option></select>
+      </div>
+      <div>
+        <label for="preference">Preference</label>
+        <select id="preference"><option value=\"\">No preference</option><option>top rated</option><option>best value</option></select>
+      </div>
+    </div>
 
-      results.innerHTML = `
-        <div class="item">
-          <h3>Search Results</h3>
-          <p>Click below to view <strong>${query}</strong> on Amazon:</p>
-          <a href="${url}" target="_blank">Open Amazon Search</a>
-        </div>
-      `;
-    });
-  </script>
+    <div class="checks">
+      <label><input type="checkbox" id="fast"> Fast shipping important</label>
+      <label><input type="checkbox" id="prime"> Amazon Prime only</label>
+    </div>
+
+    <div class="btns">
+      <button class="btn primary" type="submit">Search All (Amazon + eBay + Walmart)</button>
+      <span class="hint">We’ll open up to three tabs with your filters as keywords.</span>
+    </div>
+  </form>
+</section>
+
+<section id="about" class="section">
+  <h2 style="font-family:Orbitron;margin:0 0 10px">About NeonFind</h2>
+  <p>Created by <strong>Niyazi</strong>, niyazi adiyaman supported</p>
+</section>
+
+<footer>
+  © <span id="yr"></span> NeonFind • Built for cross-marketplace discovery.
+</footer>
+
+<script>
+document.getElementById('yr').textContent=new Date().getFullYear();
+
+function buildKeywords(){
+  const q=document.getElementById('product').value.trim();
+  const color=document.getElementById('color').value;
+  const budget=document.getElementById('budget').value;
+  const urgency=document.getElementById('urgency').value;
+  const pref=document.getElementById('preference').value;
+  const fast=document.getElementById('fast').checked;
+  const prime=document.getElementById('prime').checked;
+  const parts=[];
+  if(q)parts.push(q);
+  if(color)parts.push(color);
+  if(budget)parts.push(budget.replace('–','-'));
+  if(urgency)parts.push(urgency);
+  if(pref)parts.push(pref);
+  if(fast)parts.push('fast shipping');
+  if(prime)parts.push('Prime');
+  return parts.join(' ').trim();
+}
+
+document.getElementById('qs').addEventListener('submit',function(ev){
+  ev.preventDefault();
+  const kw=buildKeywords(); if(!kw)return;
+  const amazon='https://www.amazon.com/s?k='+encodeURIComponent(kw);
+  const ebay='https://www.ebay.com/sch/i.html?_nkw='+encodeURIComponent(kw);
+  const walmart='https://www.walmart.com/search?q='+encodeURIComponent(kw);
+  window.open(amazon,'_blank');
+  window.open(ebay,'_blank');
+  window.open(walmart,'_blank');
+});
+</script>
 </body>
 </html>
